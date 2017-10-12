@@ -106,6 +106,7 @@ def instascrape(page_info_filepath, num_requests):
 
         else:
             print("Did not have next")
+            break
 
         time.sleep(np.random.uniform(12, 17))
 
