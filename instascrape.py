@@ -36,6 +36,7 @@ def load_last_line(filepath):
     """
     with open(filepath, "r") as myfile:
         last_line = json.loads(myfile.readlines()[-1])
+        print(last_line)
     return last_line
 
 def add_new_line(new_line,filepath):
@@ -83,11 +84,11 @@ def instascrape(page_info_filepath, num_requests):
     Output: None
     """
 
-    client, collection = setup_mongo_client('instascrape', 'test')
+    client, collection = setup_mongo_client('capstone', 'insta_rainbow')
 
     page_info = load_last_line(page_info_filepath)
 
-    base_url_search = "https://www.instagram.com/graphql/query/?query_id=17875800862117404&variables={{%22tag_name%22:%22womenwhoclimb%22,%22first%22:{},%22after%22:%22{}%22}}"
+    base_url_search = "https://www.instagram.com/graphql/query/?query_id=17875800862117404&variables={{%22tag_name%22:%22doublerainbow%22,%22first%22:{},%22after%22:%22{}%22}}"
 
 
     for i in range(num_requests):
@@ -104,10 +105,21 @@ def instascrape(page_info_filepath, num_requests):
                 print "Status Code = " + str(response.status_code)
                 return None
 
-        time.sleep(np.random.uniform(15,45))
+        else:
+            print("Did not have next")
+
+        time.sleep(np.random.uniform(12, 17))
+
         print "Finished scraping {} pages of {}".format(i+1, num_requests)
 
+    total = collection.find().count()
     client.close()
-
     print "\n Finished scraping {} pages of 12 influencers each".format(num_requests)
+    print("Total records: {}".format(total))
+    return None
+
+def check_response():
+    url_search = "https://www.instagram.com/graphql/query/?query_id=17875800862117404&variables={%22tag_name%22:%22doublerainbow%22,%22first%22:12,%22after%22:%22J0HWdqKHwAAAF0HWVQ_pAAAAFvLHCQA%3D%22}"
+    response = requests.get(url_search)
+    print(response.status_code)
     return None
